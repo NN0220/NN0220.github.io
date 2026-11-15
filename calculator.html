@@ -17,38 +17,64 @@
         </ul>
     </nav>
 
-    <p class="C">
-        <div class="calc">
-            <input id="disp" readonly placeholder="0">
-            <div class="keys">
-                <button class="cl">C</button>   <button class="op">/</button>  <button class="op">*</button>
-                <button>7</button>  <button>8</button>  <button>9</button>  <button class="op">-</button>
-                <button>4</button>  <button>5</button>  <button>6</button>  <button class="op">+</button>
-                <button>1</button>  <button>2</button>  <button>3</button>  <button class="eq">=</button>
-                <button class="zero">0</button> <button>.</button>  
-            </div>
+    <div class="calc">
+        <input id="disp" readonly placeholder="0">
+        <div class="keys">
+            <button class="cl">C</button>   <button class="op">/</button>  <button class="op">*</button>
+            <button>7</button>  <button>8</button>  <button>9</button>  <button class="op">-</button>
+            <button>4</button>  <button>5</button>  <button>6</button>  <button class="op">+</button>
+            <button>1</button>  <button>2</button>  <button>3</button>  <button class="eq">=</button>
+            <button class="zero">0</button> <button>.</button>  
         </div>
-    </p>
+    </div>
+    <br>
+    <div class="board">
+        <input id="note" type="text" placeholder="name (only >0 NTD)">
+        <button id="add-btn">log</button>
+        <ul id="result-list"></ul>
+    </div>
 
     <script>
         const disp = document.getElementById('disp');
+        const note = document.getElementById('note');
+        const list = document.getElementById('result-list');
 
         const imported = new URLSearchParams(location.search).get('val');
+
         if (imported) disp.value = imported;
 
+        
         document.querySelector('.keys').onclick = ({ target }) => {
             if (target.tagName !== 'BUTTON') return;
+
             const key = target.textContent;
 
             if (key === 'C') disp.value = '';
-            else if (key === '=') {
-            try { disp.value = Function(`return ${disp.value}`)() ?? ''; }
-            catch { disp.value = 'Error'; }
-            } else {
-            if (disp.value === 'Error') disp.value = '';
-            disp.value += key;
+
+            else if (key === '='){
+                try { disp.value = Function(`return ${disp.value}`)() ?? ''; }
+                catch { disp.value = 'Error'; }
+            }
+            else{
+                if (disp.value === 'Error') disp.value = '';
+                disp.value += key;
             }
         };
+
+        document.getElementById('add-btn').onclick = () => {
+        const amount = Number(disp.value);
+
+        if (!disp.value || isNaN(amount) || amount <= 0) return;
+
+        const label = note.value.trim() || 'Unnamed';
+
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${label}</span><strong>${amount} NTD</strong>`;
+        list.appendChild(li);
+
+        note.value = '';
+        }
+        
     </script>
 </body>
 </html>
