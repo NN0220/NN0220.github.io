@@ -41,8 +41,7 @@
 
         const imported = new URLSearchParams(location.search).get('val');
 
-        if (imported) disp.value = imported;
-
+        if (imported) disp.value = imported
         
         document.querySelector('.keys').onclick = ({ target }) => {
             if (target.tagName !== 'BUTTON') return;
