@@ -1,0 +1,54 @@
+<html>
+
+<link rel="stylesheet" href="main.css">
+
+<head>
+    <title>Cheap food around NTUT-calculator</title>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li>Cheap food around NTUT :</li>
+            <li><a href="home.html" class="wavy-underline">Home</a></li>
+            <li><a href="food.html">Food</a></li>
+            <li><a href="map.html">Map</a></li>       
+            <li><a href="calculator.html">Calculator</a></li>
+        </ul>
+    </nav>
+
+    <p class="C">
+        <div class="calc">
+            <input id="disp" readonly placeholder="0">
+            <div class="keys">
+                <button class="cl">C</button>   <button class="op">/</button>  <button class="op">*</button>
+                <button>7</button>  <button>8</button>  <button>9</button>  <button class="op">-</button>
+                <button>4</button>  <button>5</button>  <button>6</button>  <button class="op">+</button>
+                <button>1</button>  <button>2</button>  <button>3</button>  <button class="eq">=</button>
+                <button class="zero">0</button> <button>.</button>  
+            </div>
+        </div>
+    </p>
+
+    <script>
+        const disp = document.getElementById('disp');
+
+        const imported = new URLSearchParams(location.search).get('val');
+        if (imported) disp.value = imported;
+
+        document.querySelector('.keys').onclick = ({ target }) => {
+            if (target.tagName !== 'BUTTON') return;
+            const key = target.textContent;
+
+            if (key === 'C') disp.value = '';
+            else if (key === '=') {
+            try { disp.value = Function(`return ${disp.value}`)() ?? ''; }
+            catch { disp.value = 'Error'; }
+            } else {
+            if (disp.value === 'Error') disp.value = '';
+            disp.value += key;
+            }
+        };
+    </script>
+</body>
+</html>
